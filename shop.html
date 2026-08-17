@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>男士腕錶 | CITY CHAIN 時間廊</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<a href="#main" class="sr-only">跳至主要內容</a>
+
+<div class="announce">【迎新優惠】新會員登記後消費滿 $1,000，於結帳時輸入優惠碼 MAW050，即可享有額外 $50 折扣</div>
+
+<div class="langbar">
+  <div class="wrap">
+    <label class="sr-only" for="lang">顯示語言</label>
+    <select id="lang" class="lang-select">
+      <option>繁體中文</option>
+      <option>English</option>
+    </select>
+  </div>
+</div>
+
+<header class="site-header">
+  <div class="wrap header-main">
+    <div>
+      <button class="icon-btn" data-open-search type="button" aria-label="搜尋商品">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>
+        </svg>
+      </button>
+    </div>
+
+    <a class="logo" href="index.html" aria-label="CITY CHAIN 首頁">
+      <svg width="42" height="24" viewBox="0 0 42 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <circle cx="14" cy="12" r="9"/><circle cx="28" cy="12" r="9"/>
+      </svg>
+      CITY CHAIN
+    </a>
+
+    <nav class="header-tools" aria-label="會員及購物">
+      <a class="hide-sm" href="#">時間廊禮品卡</a>
+      <a class="hide-sm" href="#">積分換購計劃</a>
+      <a class="hide-sm" href="#">DELIGHTS會員專區</a>
+      <a class="icon-btn" href="#" aria-label="登入或註冊">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/>
+        </svg>
+      </a>
+      <div class="cart-wrap">
+        <a class="icon-btn" href="#" aria-label="購物車">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M5 8h14l-1.2 12H6.2z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>
+          </svg>
+          <span class="cart-count" id="cartCount" hidden>0</span>
+        </a>
+        <div class="cart-panel">
+          <h3>購物車</h3>
+          <div id="cartBody"></div>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <nav class="brand-nav" aria-label="品牌">
+    <div class="wrap">
+      <a href="shop.html" aria-current="true">SOLVIL ET TITUS</a>
+      <a href="shop.html">CASIO</a>
+      <a href="shop.html">ELLESSE</a>
+      <a href="shop.html">SEIKO</a>
+      <a href="shop.html">CITIZEN</a>
+      <a href="shop.html">SEAGULL</a>
+    </div>
+  </nav>
+</header>
+
+<div class="search-overlay" id="searchOverlay" role="dialog" aria-modal="true" aria-label="搜尋商品">
+  <button class="search-close" id="searchClose" type="button" aria-label="關閉搜尋">&times;</button>
+  <div class="search-box">
+    <form id="searchForm" role="search">
+      <label class="sr-only" for="searchInput">搜尋商品</label>
+      <input id="searchInput" type="search" placeholder="搜尋腕錶、品牌或型號…" autocomplete="off">
+      <button type="submit" class="icon-btn" aria-label="開始搜尋">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>
+        </svg>
+      </button>
+    </form>
+    <div class="search-feedback" id="searchFeedback" role="alert"></div>
+  </div>
+</div>
+
+<main id="main">
+  <div class="wrap">
+
+    <!-- Breadcrumb: current position + emergency exit -->
+    <nav class="breadcrumb" aria-label="麵包屑導覽">
+      <ol>
+        <li><a href="index.html">首頁</a></li>
+        <li><a href="shop.html">腕錶</a></li>
+        <li aria-current="page" id="crumbCurrent">全部腕錶</li>
+      </ol>
+    </nav>
+
+    <h1 class="page-title" id="pageTitle">全部腕錶</h1>
+
+    <!-- Category switcher — move between the five款式 pages
+         without going back to the home page. -->
+    <nav class="cat-chips" id="catChips" aria-label="腕錶款式"></nav>
+
+    <div class="shop-layout">
+
+      <!-- ====================================================
+           FILTERS — one control per dimension.
+           The original site could only filter on brand, price
+           and stock, and never in combination.
+           ==================================================== -->
+      <form class="filters" id="filters" aria-label="商品篩選">
+        <h2>篩選</h2>
+
+        <div class="fgroup" role="group" aria-label="機芯類型">
+          <h3>機芯類型</h3>
+          <label><input type="checkbox" name="movement" value="quartz">石英</label>
+          <label><input type="checkbox" name="movement" value="automatic">自動</label>
+          <label><input type="checkbox" name="movement" value="mechanical">機械</label>
+        </div>
+
+        <div class="fgroup" role="group" aria-label="性別">
+          <h3>性別</h3>
+          <label><input type="checkbox" name="gender" value="male">男裝</label>
+          <label><input type="checkbox" name="gender" value="female">女裝</label>
+        </div>
+
+        <div class="fgroup">
+          <h3><span>價格上限</span><output id="priceOut">$13,000</output></h3>
+          <label class="sr-only" for="priceMax">價格上限</label>
+          <input type="range" id="priceMax" min="250" max="13000" step="250" value="13000">
+          <div class="scale"><span>$250</span><span>$6,500</span><span>$13,000</span></div>
+        </div>
+
+        <div class="fgroup">
+          <h3>顏色</h3>
+          <div id="colourGroup"></div>
+        </div>
+
+        <div class="fgroup">
+          <h3>客戶評分</h3>
+          <label><input type="radio" name="rating" value="5">★★★★★</label>
+          <label><input type="radio" name="rating" value="4">★★★★☆ 以上</label>
+          <label><input type="radio" name="rating" value="3">★★★☆☆ 以上</label>
+          <label><input type="radio" name="rating" value="2">★★☆☆☆ 以上</label>
+          <label><input type="radio" name="rating" value="1">★☆☆☆☆ 以上</label>
+        </div>
+
+        <button class="btn-clear" id="clearFilters" type="button">清除所有篩選</button>
+      </form>
+
+      <!-- ====================================================
+           RESULTS
+           ==================================================== -->
+      <section aria-label="商品列表">
+        <div class="shop-toolbar">
+          <p class="result-count"><span id="resultCount"></span> <span id="activeQuery"></span></p>
+          <div>
+            <label class="sr-only" for="sortBy">排序方式</label>
+            <select id="sortBy">
+              <option value="new">日期 (從新到舊)</option>
+              <option value="price-asc">價格 (低至高)</option>
+              <option value="price-desc">價格 (高至低)</option>
+              <option value="rating">評分最高</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid--3" id="shopGrid"></div>
+
+        <nav class="pagination" aria-label="分頁">
+          <button type="button" aria-current="true">1</button>
+          <button type="button">2</button>
+          <button type="button">3</button>
+          <span>…</span>
+          <button type="button">6</button>
+          <button type="button" aria-label="下一頁">›</button>
+        </nav>
+      </section>
+
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-cols">
+      <div>
+        <h2>關於我們</h2>
+        <ul><li><a href="#">About City Chain</a></li></ul>
+      </div>
+      <div>
+        <h2>資訊</h2>
+        <ul>
+          <li><a href="#">使用條款</a></li>
+          <li><a href="#">私隱政策</a></li>
+          <li><a href="#">退貨政策</a></li>
+          <li><a href="#">常見問題</a></li>
+          <li><a href="#">會員權益</a></li>
+          <li><a href="#">產品保養及維修</a></li>
+          <li><a href="#">店舖位置</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>聯絡我們</h2>
+        <ul>
+          <li>電話：(852) 2113 2266</li>
+          <li>電子郵件：cs@citychain.com</li>
+        </ul>
+      </div>
+      <div>
+        <h2>訂閱電子報</h2>
+        <p>訂閱以獲取特別折扣、免費贈品和千載難逢的優惠。</p>
+        <form class="newsletter" onsubmit="event.preventDefault();this.reset();">
+          <label class="sr-only" for="nl">電子郵件地址</label>
+          <input id="nl" type="email" placeholder="輸入您的電子郵件" required>
+          <button type="submit" class="icon-btn" aria-label="訂閱">✉</button>
+        </form>
+        <div class="social">
+          <a href="#" aria-label="Instagram">Instagram</a>
+          <a href="#" aria-label="Facebook">Facebook</a>
+          <a href="#" aria-label="YouTube">YouTube</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-base">
+      <div class="pay-icons">
+        <span>AMEX</span><span>Apple Pay</span><span>G Pay</span><span>Mastercard</span>
+        <span>shop</span><span>UnionPay</span><span>VISA</span>
+      </div>
+      <p>&copy; 2026 City Chain Hong Kong</p>
+    </div>
+  </div>
+</footer>
+
+<button class="to-top" id="toTop" type="button" aria-label="返回頁首">↑</button>
+
+<div class="loader" id="loader" aria-hidden="true">
+  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <circle cx="12" cy="12" r="3"/>
+    <path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/>
+  </svg>
+</div>
+
+<script src="assets/app.js"></script>
+</body>
+</html>
