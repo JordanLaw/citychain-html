@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CITY CHAIN 時間廊 | 網上商店</title>
+<meta name="description" content="City Chain 香港網上腕錶商店 — 重新設計實作原型 (VT6012CEM User Experience Design)。">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<!-- Skip link: keyboard users can bypass the header. -->
+<a href="#main" class="sr-only">跳至主要內容</a>
+
+<!-- ============================================================
+     HEADER
+     ============================================================ -->
+<div class="announce">【迎新優惠】新會員登記後消費滿 $1,000，於結帳時輸入優惠碼 MAW050，即可享有額外 $50 折扣</div>
+
+<div class="langbar">
+  <div class="wrap">
+    <label class="sr-only" for="lang">顯示語言</label>
+    <select id="lang" class="lang-select">
+      <option>繁體中文</option>
+      <option>English</option>
+    </select>
+  </div>
+</div>
+
+<header class="site-header">
+  <div class="wrap header-main">
+
+    <div>
+      <button class="icon-btn" data-open-search type="button" aria-label="搜尋商品">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>
+        </svg>
+      </button>
+    </div>
+
+    <a class="logo" href="index.html" aria-label="CITY CHAIN 首頁">
+      <svg width="42" height="24" viewBox="0 0 42 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <circle cx="14" cy="12" r="9"/><circle cx="28" cy="12" r="9"/>
+      </svg>
+      CITY CHAIN
+    </a>
+
+    <nav class="header-tools" aria-label="會員及購物">
+      <a class="hide-sm" href="#">時間廊禮品卡</a>
+      <a class="hide-sm" href="#">積分換購計劃</a>
+      <a class="hide-sm" href="#">DELIGHTS會員專區</a>
+
+      <a class="icon-btn" href="#" aria-label="登入或註冊">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/>
+        </svg>
+      </a>
+
+      <!-- Cart shortcut: contents revealed on hover -->
+      <div class="cart-wrap">
+        <a class="icon-btn" href="#" aria-label="購物車">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M5 8h14l-1.2 12H6.2z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>
+          </svg>
+          <span class="cart-count" id="cartCount" hidden>0</span>
+        </a>
+        <div class="cart-panel">
+          <h3>購物車</h3>
+          <div id="cartBody"></div>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <nav class="brand-nav" aria-label="品牌">
+    <div class="wrap">
+      <a href="shop.html">SOLVIL ET TITUS</a>
+      <a href="shop.html">CASIO</a>
+      <a href="shop.html">ELLESSE</a>
+      <a href="shop.html">SEIKO</a>
+      <a href="shop.html">CITIZEN</a>
+      <a href="shop.html">SEAGULL</a>
+    </div>
+  </nav>
+</header>
+
+<!-- ============================================================
+     SEARCH OVERLAY
+     ============================================================ -->
+<div class="search-overlay" id="searchOverlay" role="dialog" aria-modal="true" aria-label="搜尋商品">
+  <button class="search-close" id="searchClose" type="button" aria-label="關閉搜尋">&times;</button>
+  <div class="search-box">
+    <form id="searchForm" role="search">
+      <label class="sr-only" for="searchInput">搜尋商品</label>
+      <input id="searchInput" type="search" placeholder="搜尋腕錶、品牌或型號…" autocomplete="off">
+      <button type="submit" class="icon-btn" aria-label="開始搜尋">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>
+        </svg>
+      </button>
+    </form>
+    <!-- Failed searches get an explicit message, not silence. -->
+    <div class="search-feedback" id="searchFeedback" role="alert"></div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MAIN
+     ============================================================ -->
+<main id="main">
+
+  <!-- Category navigation by picture, not by brand name.
+       Persona Jordan does not know watch brands. -->
+  <section class="wrap" aria-labelledby="catHead">
+    <h1 id="catHead" class="sr-only">依款式選購腕錶</h1>
+    <nav class="cat-nav" aria-label="腕錶款式">
+
+      <!-- 石英錶 — battery cell above the dial says "powered by a cell" -->
+      <a href="shop.html?cat=quartz">
+        <span class="cat-art">
+          <svg width="120" height="140" viewBox="0 0 120 140" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="46" y="14" width="28" height="16" rx="2"/>
+            <path d="M56 14v-4h8v4"/>
+            <path d="M52 22h6M62 19v6M59 22h6" stroke-width="1.6"/>
+            <circle cx="60" cy="80" r="34"/>
+            <circle cx="60" cy="80" r="27"/>
+            <path d="M60 80V62M60 80l13 8"/>
+            <path d="M94 76h4M22 76h4" stroke-width="1.6"/>
+          </svg>
+        </span>
+        <span class="cat-label">石英錶</span>
+      </a>
+
+      <!-- 自動錶 — the oscillating rotor, the part that self-winds -->
+      <a href="shop.html?cat=automatic">
+        <span class="cat-art">
+          <svg width="120" height="140" viewBox="0 0 120 140" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="60" cy="70" r="42"/>
+            <path d="M28 60 A34 34 0 0 1 92 60 Z" stroke-width="2"/>
+            <circle cx="60" cy="70" r="9"/>
+            <circle cx="60" cy="70" r="3" fill="currentColor" stroke="none"/>
+            <path d="M60 108v5M103 70h5M17 70h5" stroke-width="1.6"/>
+            <path d="M86 96a34 34 0 0 0 8-14" stroke-width="1.5"/>
+            <path d="M34 96a34 34 0 0 1-8-14" stroke-width="1.5"/>
+          </svg>
+        </span>
+        <span class="cat-label">自動錶</span>
+      </a>
+
+      <!-- 機械錶 — a gear train, the hand-wound movement -->
+      <a href="shop.html?cat=mechanical">
+        <span class="cat-art">
+          <svg width="120" height="140" viewBox="0 0 120 140" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="52" cy="62" r="26"/>
+            <circle cx="52" cy="62" r="9"/>
+            <path d="M52 36v-7M52 88v7M26 62h-7M78 62h7M34 44l-5-5M70 80l5 5M70 44l5-5M34 80l-5 5"
+                  stroke-width="1.8"/>
+            <circle cx="86" cy="96" r="15"/>
+            <circle cx="86" cy="96" r="5"/>
+            <path d="M86 81v-5M86 111v5M71 96h-5M101 96h5" stroke-width="1.6"/>
+          </svg>
+        </span>
+        <span class="cat-label">機械錶</span>
+      </a>
+
+      <!-- 男裝 — wider case on a link bracelet -->
+      <a href="shop.html?cat=male">
+        <span class="cat-art">
+          <svg width="120" height="140" viewBox="0 0 120 140" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="46" y="12" width="28" height="12" rx="2"/>
+            <rect x="46" y="27" width="28" height="12" rx="2"/>
+            <rect x="46" y="101" width="28" height="12" rx="2"/>
+            <rect x="46" y="116" width="28" height="12" rx="2"/>
+            <circle cx="60" cy="70" r="33"/>
+            <circle cx="60" cy="70" r="26"/>
+            <path d="M60 70V52M60 70l14 8"/>
+            <path d="M93 65h5v10h-5" stroke-width="1.8"/>
+          </svg>
+        </span>
+        <span class="cat-label">男裝</span>
+      </a>
+
+      <!-- 女裝 — slimmer oval case on a tapered strap -->
+      <a href="shop.html?cat=female">
+        <span class="cat-art">
+          <svg width="120" height="140" viewBox="0 0 120 140" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M52 48L48 12h24l-4 36"/>
+            <path d="M52 92l-4 36h24l-4-36"/>
+            <ellipse cx="60" cy="70" rx="21" ry="25"/>
+            <ellipse cx="60" cy="70" rx="15" ry="19"/>
+            <path d="M60 70V56M60 70l10 6"/>
+            <path d="M81 66h4v8h-4" stroke-width="1.6"/>
+          </svg>
+        </span>
+        <span class="cat-label">女裝</span>
+      </a>
+
+    </nav>
+  </section>
+
+  <!-- New arrivals: saves the first click, which the original
+       home page spent on a promotional banner. -->
+  <section class="section" aria-labelledby="arrivalsHead">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="arrivalsHead">新品推薦</h2>
+        <a class="btn-ghost" href="shop.html">查看更多</a>
+      </div>
+      <div class="grid grid--5" id="newArrivals"></div>
+    </div>
+  </section>
+
+  <!-- Last visited: the returning-user shortcut. -->
+  <section class="section" aria-labelledby="visitedHead">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="visitedHead">最近瀏覽過</h2>
+      </div>
+      <div class="grid grid--5" id="lastVisited"></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-cols">
+      <div>
+        <h2>關於我們</h2>
+        <ul><li><a href="#">About City Chain</a></li></ul>
+      </div>
+      <div>
+        <h2>資訊</h2>
+        <ul>
+          <li><a href="#">使用條款</a></li>
+          <li><a href="#">私隱政策</a></li>
+          <li><a href="#">退貨政策</a></li>
+          <li><a href="#">常見問題</a></li>
+          <li><a href="#">會員權益</a></li>
+          <li><a href="#">產品保養及維修</a></li>
+          <li><a href="#">店舖位置</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>聯絡我們</h2>
+        <ul>
+          <li>電話：(852) 2113 2266</li>
+          <li>電子郵件：cs@citychain.com</li>
+        </ul>
+      </div>
+      <div>
+        <h2>訂閱電子報</h2>
+        <p>訂閱以獲取特別折扣、免費贈品和千載難逢的優惠。</p>
+        <form class="newsletter" onsubmit="event.preventDefault();this.reset();">
+          <label class="sr-only" for="nl">電子郵件地址</label>
+          <input id="nl" type="email" placeholder="輸入您的電子郵件" required>
+          <button type="submit" class="icon-btn" aria-label="訂閱">✉</button>
+        </form>
+        <div class="social">
+          <a href="#" aria-label="Instagram">Instagram</a>
+          <a href="#" aria-label="Facebook">Facebook</a>
+          <a href="#" aria-label="YouTube">YouTube</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-base">
+      <div class="pay-icons">
+        <span>AMEX</span><span>Apple Pay</span><span>G Pay</span><span>Mastercard</span>
+        <span>shop</span><span>UnionPay</span><span>VISA</span>
+      </div>
+      <p>&copy; 2026 City Chain Hong Kong</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Jump to top -->
+<button class="to-top" id="toTop" type="button" aria-label="返回頁首">↑</button>
+
+<!-- Loading indicator (rotating gear) -->
+<div class="loader" id="loader" aria-hidden="true">
+  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <circle cx="12" cy="12" r="3"/>
+    <path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/>
+  </svg>
+</div>
+
+<script src="assets/app.js"></script>
+</body>
+</html>
