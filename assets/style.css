@@ -13,7 +13,9 @@
   --navy:        #1c1a63;
   --ink:         #111111;
   --ink-soft:    #4a4a4a;
-  --ink-faint:   #8a8a8a;
+  /* Raised from #8a8a8a, which measured only 3.45:1 on white and so
+     failed WCAG AA for the fine print in pop-ups. */
+  --ink-faint:   #6b6b6b;
   --line:        #e2e2e2;
   --line-soft:   #f0f0f0;
   --bg:          #ffffff;
@@ -21,6 +23,11 @@
   --sale:        #d0021b;
   --accent:      #1c1a63;
   --star:        #f5a623;
+  /* Text drawn ON a coloured fill. Kept as its own token because the
+     fill lightens in the dark theme, so the text on it must darken —
+     a hard-coded white silently fails there. */
+  --sale-ink:    #ffffff;
+  --navy-ink:    #ffffff;
 
   /* Minimum body size 14px so users with presbyopia
      (see persona: users aged 40+) can read without zooming. */
@@ -44,6 +51,36 @@
   --ease: .18s ease;
 }
 
+/* ---------- 1b. Dark theme -----------------------------------
+   Only the tokens are redeclared. Because every rule below reads
+   colour through a variable, the whole interface re-themes from
+   this one block — the same CONSISTENCY argument as section 5.4.
+   Requested by participants during the evaluation.
+   ----------------------------------------------------------- */
+[data-theme="dark"] {
+  --navy:      #8f96d6;
+  --ink:       #f1f2f6;
+  --ink-soft:  #c2c5cf;
+  --ink-faint: #8a8e9b;
+  --line:      #33363f;
+  --line-soft: #262931;
+  --bg:        #16181d;
+  --bg-alt:    #1e2128;
+  --sale:      #ff6b6b;
+  --accent:    #8f96d6;
+  --star:      #ffc247;
+  /* Both fills are lighter here than in the light theme, so the text
+     on them flips to dark rather than staying white. */
+  --sale-ink:  #16181d;
+  --navy-ink:  #16181d;
+  --shadow:    0 2px 12px rgba(0, 0, 0, .5);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, .6);
+}
+
+/* Product photographs are shot on white, so they are softened
+   very slightly in dark mode to avoid glare. */
+[data-theme="dark"] .pimg { filter: brightness(.94); }
+
 /* ---------- 2. Reset ---------------------------------------- */
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -66,6 +103,19 @@ button {
   font: inherit; color: inherit;
   background: none; border: 0; cursor: pointer;
 }
+
+/* Text fields do not inherit colour from the page the way ordinary
+   text does — the browser gives them its own near-black default. On
+   the dark theme that left typed text almost invisible against the
+   dark background. Binding them to the --ink token instead means the
+   text is white in the dark theme and near-black in the light one,
+   from a single declaration. */
+input, select, textarea {
+  font-family: inherit;
+  color: var(--ink);
+}
+input::placeholder, textarea::placeholder { color: var(--ink-faint); opacity: 1; }
+
 ul { list-style: none; margin: 0; padding: 0; }
 
 /* Visible keyboard focus — an accessibility requirement that
@@ -97,7 +147,7 @@ ul { list-style: none; margin: 0; padding: 0; }
 
 .announce {
   background: var(--navy);
-  color: #fff;
+  color: var(--navy-ink);
   font-size: var(--fs-xs);
   text-align: center;
   padding: var(--space-2) var(--space-3);
@@ -191,7 +241,7 @@ ul { list-style: none; margin: 0; padding: 0; }
   padding: 0 4px;
   border-radius: 999px;
   background: var(--sale);
-  color: #fff;
+  color: var(--sale-ink);
   font-size: 10px;
   line-height: 16px;
   text-align: center;
@@ -203,7 +253,7 @@ ul { list-style: none; margin: 0; padding: 0; }
   top: calc(100% + 10px);
   right: 0;
   width: 320px;
-  background: #fff;
+  background: var(--bg);
   border: 1px solid var(--line);
   box-shadow: var(--shadow-lg);
   padding: var(--space-3);
@@ -249,7 +299,7 @@ ul { list-style: none; margin: 0; padding: 0; }
 .search-overlay {
   position: fixed; inset: 0;
   z-index: 60;
-  background: rgba(255, 255, 255, .97);
+  background: var(--bg);
   display: none;
   padding-top: 12vh;
 }
@@ -267,7 +317,15 @@ ul { list-style: none; margin: 0; padding: 0; }
   padding: var(--space-3) 0;
   font-size: var(--fs-lg);
   background: transparent;
+  /* White on the dark theme, near-black on the light one. Stated here
+     as well as in the reset so the search field cannot lose it. */
+  color: var(--ink);
+  caret-color: var(--ink);
 }
+.search-box input::placeholder { color: var(--ink-faint); opacity: 1; }
+/* Remove the browser's own clear button, which renders as a dark
+   cross that disappears against the dark background. */
+.search-box input::-webkit-search-cancel-button { -webkit-appearance: none; }
 .search-box input:focus { outline: none; }
 
 .search-feedback {
@@ -279,6 +337,7 @@ ul { list-style: none; margin: 0; padding: 0; }
   display: none;
 }
 .search-feedback.is-visible { display: block; }
+[data-theme="dark"] .search-feedback { background: #33222a; }
 .search-feedback strong { color: var(--sale); }
 .search-feedback ul { margin-top: var(--space-2); }
 .search-feedback li { padding-block: 2px; }
@@ -357,7 +416,7 @@ ul { list-style: none; margin: 0; padding: 0; }
   font-size: var(--fs-xs);
   transition: background var(--ease), color var(--ease);
 }
-.btn-ghost:hover { background: var(--ink); color: #fff; }
+.btn-ghost:hover { background: var(--ink); color: var(--bg); }
 
 /* ============================================================
    8. PRODUCT CARD + HOVER SHORTCUTS
@@ -387,7 +446,7 @@ ul { list-style: none; margin: 0; padding: 0; }
   position: absolute;
   top: var(--space-2); left: var(--space-2);
   background: var(--sale);
-  color: #fff;
+  color: var(--sale-ink);
   font-size: 10px;
   padding: 2px 6px;
   letter-spacing: .06em;
@@ -401,7 +460,7 @@ ul { list-style: none; margin: 0; padding: 0; }
   justify-content: center;
   gap: var(--space-2);
   padding: var(--space-2);
-  background: rgba(255, 255, 255, .94);
+  background: var(--bg);
   transform: translateY(100%);
   transition: transform var(--ease);
 }
@@ -412,10 +471,10 @@ ul { list-style: none; margin: 0; padding: 0; }
   width: 36px; height: 36px;
   display: grid; place-items: center;
   border: 1px solid var(--line);
-  background: #fff;
+  background: var(--bg);
   transition: background var(--ease), color var(--ease);
 }
-.card__actions button:hover { background: var(--ink); color: #fff; }
+.card__actions button:hover { background: var(--ink); color: var(--bg); }
 /* AFFORDANCE, negative case: an unavailable control is dimmed and
    refuses the pointer, so the user learns before clicking. */
 .card__actions button:disabled {
@@ -488,11 +547,12 @@ ul { list-style: none; margin: 0; padding: 0; }
 .cat-chips a:hover { border-color: var(--ink); }
 .cat-chips a[aria-current="true"] {
   background: var(--ink);
-  color: #fff;
+  color: var(--bg);
   border-color: var(--ink);
 }
 
 .filters {
+  background: var(--bg);
   border: 1px solid var(--line);
   padding: var(--space-3);
   position: sticky;
@@ -524,6 +584,14 @@ ul { list-style: none; margin: 0; padding: 0; }
 }
 .fgroup label:hover { color: var(--accent); }
 
+/* How many products each option is worth, so the user can judge
+   a filter before spending a click on it. */
+.fcount { color: var(--ink-faint); font-size: var(--fs-xs); }
+
+/* The brand list is the longest group; cap it and let it scroll
+   rather than pushing price and colour off the screen. */
+#brandGroup { max-height: 168px; overflow-y: auto; }
+
 .swatch {
   width: 12px; height: 12px;
   border-radius: 50%;
@@ -543,7 +611,7 @@ ul { list-style: none; margin: 0; padding: 0; }
   font-size: var(--fs-xs);
   transition: background var(--ease), color var(--ease);
 }
-.btn-clear:hover { background: var(--ink); color: #fff; }
+.btn-clear:hover { background: var(--ink); color: var(--bg); }
 
 .shop-toolbar {
   display: flex;
@@ -552,7 +620,14 @@ ul { list-style: none; margin: 0; padding: 0; }
   margin-bottom: var(--space-4);
   font-size: var(--fs-sm);
 }
-.shop-toolbar select { padding: var(--space-2); border: 1px solid var(--line); font-size: var(--fs-sm); }
+/* The sort menu is the one control with a solid background, so it
+   needs the themed background as well as the themed text. */
+.shop-toolbar select {
+  padding: var(--space-2);
+  border: 1px solid var(--line);
+  font-size: var(--fs-sm);
+  background: var(--bg);
+}
 
 .result-count { color: var(--ink-soft); }
 
@@ -576,7 +651,7 @@ ul { list-style: none; margin: 0; padding: 0; }
   border: 1px solid transparent;
 }
 .pagination button:hover { border-color: var(--line); }
-.pagination button[aria-current="true"] { background: var(--ink); color: #fff; }
+.pagination button[aria-current="true"] { background: var(--ink); color: var(--bg); }
 
 /* ============================================================
    10. PRODUCT DETAILS PAGE
@@ -638,6 +713,35 @@ ul { list-style: none; margin: 0; padding: 0; }
 }
 
 .cart-line .thumb { display: block; width: 48px; height: 48px; }
+
+/* price and remove button share the right-hand column */
+.cart-line__end {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  white-space: nowrap;
+}
+
+/* USER CONTROL: every line can be undone, in one click.
+   Kept quiet until hovered so it does not compete with the
+   product itself, but always present and always reachable. */
+.cart-remove {
+  width: 22px; height: 22px;
+  flex: 0 0 auto;
+  display: grid; place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 15px;
+  line-height: 1;
+  color: var(--ink-soft);
+  transition: background var(--ease), color var(--ease), border-color var(--ease);
+}
+.cart-remove:hover,
+.cart-remove:focus-visible {
+  background: var(--sale);
+  border-color: var(--sale);
+  color: var(--sale-ink);
+}
 .cart-line .thumb > svg,
 .card__media > svg { width: 100%; height: 100%; object-fit: contain; }
 
@@ -661,7 +765,7 @@ ul { list-style: none; margin: 0; padding: 0; }
   display: block;
   width: 100%;
   background: var(--ink);
-  color: #fff;
+  color: var(--bg);
   padding: var(--space-3);
   font-size: var(--fs-sm);
   letter-spacing: .1em;
@@ -718,7 +822,9 @@ ul { list-style: none; margin: 0; padding: 0; }
   left: 50%; bottom: var(--space-5);
   transform: translate(-50%, 20px);
   background: var(--ink);
-  color: #fff;
+  /* Inverts with the theme. A hard-coded #fff here rendered white on
+     the near-white --ink of the dark theme: 1.12:1, invisible. */
+  color: var(--bg);
   padding: var(--space-3) var(--space-4);
   font-size: var(--fs-sm);
   box-shadow: var(--shadow-lg);
@@ -736,7 +842,8 @@ ul { list-style: none; margin: 0; padding: 0; }
 .loader {
   position: fixed;
   inset: 0;
-  background: rgba(255, 255, 255, .8);
+  background: var(--bg);
+  opacity: .8;
   display: grid;
   place-items: center;
   z-index: 80;
@@ -762,7 +869,7 @@ ul { list-style: none; margin: 0; padding: 0; }
   right: var(--space-4); bottom: var(--space-4);
   width: 44px; height: 44px;
   display: grid; place-items: center;
-  background: #fff;
+  background: var(--bg);
   border: 1px solid var(--line);
   box-shadow: var(--shadow);
   z-index: 50;
@@ -770,7 +877,7 @@ ul { list-style: none; margin: 0; padding: 0; }
   transition: opacity var(--ease), visibility var(--ease);
 }
 .to-top.is-visible { opacity: 1; visibility: visible; }
-.to-top:hover { background: var(--ink); color: #fff; }
+.to-top:hover { background: var(--ink); color: var(--bg); }
 
 /* ============================================================
    14. FOOTER
@@ -832,4 +939,145 @@ ul { list-style: none; margin: 0; padding: 0; }
   .filters { position: static; }
   .section-head h2 { font-size: var(--fs-lg); }
   .cart-panel { width: min(320px, calc(100vw - 32px)); }
+}
+
+
+/* ============================================================
+   16. THEME TOGGLE
+   USER CONTROL: the interface is the user's to set, and the
+   choice is remembered between visits.
+   ============================================================ */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px; height: 32px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  transition: background var(--ease), border-color var(--ease);
+}
+.theme-toggle:hover { background: var(--line-soft); border-color: var(--ink); }
+.theme-toggle .icon-moon { display: none; }
+[data-theme="dark"] .theme-toggle .icon-sun  { display: none; }
+[data-theme="dark"] .theme-toggle .icon-moon { display: inline; }
+
+/* ============================================================
+   17. LOGIN OVERLAY
+   Built once in app.js and reused on every page, so the sign-in
+   procedure cannot differ between screens.
+   ============================================================ */
+.login-overlay {
+  position: fixed; inset: 0;
+  z-index: 70;
+  background: rgba(0, 0, 0, .45);
+  display: none;
+  place-items: center;
+  padding: var(--space-4);
+}
+.login-overlay.is-open { display: grid; }
+
+.login-card {
+  width: min(420px, 100%);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-5) var(--space-4) var(--space-4);
+  position: relative;
+}
+.login-card h2 {
+  margin: 0 0 var(--space-1);
+  font-size: var(--fs-lg);
+  font-weight: 400;
+  letter-spacing: .08em;
+  text-align: center;
+}
+.login-card .sub {
+  margin: 0 0 var(--space-4);
+  font-size: var(--fs-sm);
+  color: var(--ink-soft);
+  text-align: center;
+}
+.login-close {
+  position: absolute;
+  top: var(--space-2); right: var(--space-3);
+  font-size: 24px; line-height: 1;
+  color: var(--ink-soft);
+}
+.login-close:hover { color: var(--ink); }
+
+.field { margin-bottom: var(--space-3); }
+.field label {
+  display: block;
+  font-size: var(--fs-sm);
+  margin-bottom: var(--space-1);
+}
+.field input {
+  width: 100%;
+  padding: 10px var(--space-2);
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--ink);
+  font-size: var(--fs-sm);
+}
+.field input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+/* FEEDBACK: an invalid field states what is wrong, next to the
+   field that is wrong. */
+.field.is-invalid input { border-color: var(--sale); }
+.field .err {
+  display: none;
+  margin-top: 4px;
+  font-size: var(--fs-xs);
+  color: var(--sale);
+}
+.field.is-invalid .err { display: block; }
+
+.login-note {
+  margin-top: var(--space-3);
+  font-size: var(--fs-xs);
+  color: var(--ink-faint);
+  text-align: center;
+}
+
+/* ============================================================
+   18. ABOUT PAGE
+   ============================================================ */
+.about-hero {
+  background: var(--bg-alt);
+  padding: var(--space-5) var(--space-4);
+  text-align: center;
+  margin-bottom: var(--space-5);
+}
+.about-hero h1 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--fs-xl);
+  font-weight: 400;
+  letter-spacing: .08em;
+}
+.about-hero p {
+  margin: 0 auto;
+  max-width: 60ch;
+  color: var(--ink-soft);
+  font-size: var(--fs-sm);
+}
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+  padding-bottom: var(--space-6);
+}
+.about-grid section {
+  border: 1px solid var(--line);
+  padding: var(--space-4);
+}
+.about-grid h2 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--fs-base);
+  letter-spacing: .04em;
+}
+.about-grid p { margin: 0; font-size: var(--fs-sm); color: var(--ink-soft); }
+
+@media (max-width: 720px) {
+  .about-grid { grid-template-columns: 1fr; }
 }

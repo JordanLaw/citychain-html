@@ -124,6 +124,10 @@
      pressed. */
   const inStock = p => (PRODUCTS.indexOf(p) % 7) !== 3;
 
+  /* Brands, derived from the catalogue rather than hard-coded, so
+     the filter can never list a brand the shop does not stock. */
+  const BRANDS = () => [...new Set(PRODUCTS.map(p => p.brand))].sort();
+
   /* Colour swatches shown in the filter panel. */
   const COLOURS = [
     { key: 'black',  label: '黑色', hex: '#1a1a1a' },
@@ -408,6 +412,11 @@
       if (found) { found.qty += (qty || 1); } else { items.push({ id: id, qty: qty || 1 }); }
       this.write(items);
     },
+    /* USER CONTROL AND FREEDOM: anything added must be removable,
+       and in one click rather than by emptying the whole basket. */
+    remove(id) {
+      this.write(this.read().filter(i => i.id !== id));
+    },
     count() { return this.read().reduce((n, i) => n + i.qty, 0); },
     total() {
       return this.read().reduce((sum, i) => {
@@ -435,13 +444,29 @@
         return `<div class="cart-line">
             <span class="thumb">${productArt(p, 44)}</span>
             <span>${esc(p.name)}<br><small>數量 ${i.qty}</small></span>
-            <span>${money(p.price * i.qty)}</span>
+            <span class="cart-line__end">
+              <span>${money(p.price * i.qty)}</span>
+              <button type="button" class="cart-remove" data-remove="${esc(p.id)}"
+                      title="移除 ${esc(p.name)}"
+                      aria-label="從購物車移除 ${esc(p.name)}">&times;</button>
+            </span>
           </div>`;
       }).join('')
       + `<div class="cart-total"><span>小計</span><span>${money(this.total())}</span></div>
          <a class="btn-primary" href="#" style="margin-top:12px">前往結帳</a>`;
     }
   };
+
+  /* Remove a line from the cart. Delegated, so it keeps working
+     after the panel is re-rendered. */
+  document.addEventListener('click', function (e) {
+    const btn = e.target.closest('[data-remove]');
+    if (!btn) return;
+    e.preventDefault();
+    const p = PRODUCTS.find(x => x.id === btn.dataset.remove);
+    Cart.remove(btn.dataset.remove);
+    toast(p ? `已從購物車移除：${p.name}` : '已從購物車移除');
+  });
 
   /* ==========================================================
      5. TOAST — feedback that an action succeeded.
@@ -575,6 +600,118 @@
   }
 
   /* ==========================================================
+     8b. THEME
+     ----------------------------------------------------------
+     USER CONTROL: the interface is the user's to set. The choice
+     is stored, so it survives a page change and a return visit.
+     Only the design tokens change, so one switch re-themes every
+     screen — the consistency argument made in section 5.4.
+     ========================================================== */
+  const THEME_KEY = 'cc_theme';
+
+  function readTheme() {
+    try { return localStorage.getItem(THEME_KEY); } catch (e) { return null; }
+  }
+
+  function applyTheme(mode) {
+    document.documentElement.setAttribute('data-theme', mode);
+    const btn = $('#themeToggle');
+    if (btn) {
+      btn.setAttribute('aria-pressed', String(mode === 'dark'));
+      btn.setAttribute('aria-label', mode === 'dark' ? '切換至淺色主題' : '切換至深色主題');
+      btn.title = btn.getAttribute('aria-label');
+    }
+  }
+
+  function initTheme() {
+    /* Saved choice wins; otherwise follow the operating system. */
+    let mode = readTheme();
+    if (!mode) {
+      mode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark' : 'light';
+    }
+    applyTheme(mode);
+
+    const btn = $('#themeToggle');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      const next = document.documentElement.getAttribute('data-theme') === 'dark'
+        ? 'light' : 'dark';
+      applyTheme(next);
+      try { localStorage.setItem(THEME_KEY, next); } catch (e) { /* ignore */ }
+      toast(next === 'dark' ? '已切換至深色主題' : '已切換至淺色主題');
+    });
+  }
+
+  /* ==========================================================
+     8c. LOGIN
+     ----------------------------------------------------------
+     The panel is built once here and reused by every page, so the
+     sign-in procedure cannot differ between screens. There is no
+     back end: the form demonstrates validation feedback, and says
+     so plainly rather than pretending to create an account.
+     ========================================================== */
+  function initLogin() {
+    if ($('#loginOverlay')) return;
+
+    const wrap = document.createElement('div');
+    wrap.id = 'loginOverlay';
+    wrap.className = 'login-overlay';
+    wrap.setAttribute('role', 'dialog');
+    wrap.setAttribute('aria-modal', 'true');
+    wrap.setAttribute('aria-label', '登入或註冊');
+    wrap.innerHTML =
+      '<div class="login-card">' +
+        '<button type="button" class="login-close" id="loginClose" aria-label="關閉">&times;</button>' +
+        '<h2>登入或註冊</h2>' +
+        '<p class="sub">DELIGHTS 會員專區</p>' +
+        '<form id="loginForm" novalidate>' +
+          '<div class="field" id="fEmail">' +
+            '<label for="loginEmail">電子郵件</label>' +
+            '<input id="loginEmail" type="email" autocomplete="email" placeholder="you@example.com">' +
+            '<span class="err">請輸入有效的電子郵件地址。</span>' +
+          '</div>' +
+          '<div class="field" id="fPass">' +
+            '<label for="loginPass">密碼</label>' +
+            '<input id="loginPass" type="password" autocomplete="current-password" placeholder="至少 8 個字元">' +
+            '<span class="err">密碼至少需要 8 個字元。</span>' +
+          '</div>' +
+          '<button type="submit" class="btn-primary">登入</button>' +
+          '<a class="btn-secondary" href="#">建立新帳戶</a>' +
+        '</form>' +
+        '<p class="login-note">這是課業原型，不會建立真實帳戶，也不會儲存任何資料。</p>' +
+      '</div>';
+    document.body.appendChild(wrap);
+
+    const close = () => wrap.classList.remove('is-open');
+    $$('[data-open-login]').forEach(b => b.addEventListener('click', function (e) {
+      e.preventDefault();
+      wrap.classList.add('is-open');
+      $('#loginEmail').focus();
+    }));
+    $('#loginClose').addEventListener('click', close);
+    wrap.addEventListener('click', e => { if (e.target === wrap) close(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+
+    $('#loginForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const email = $('#loginEmail').value.trim();
+      const pass  = $('#loginPass').value;
+      const okEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      const okPass  = pass.length >= 8;
+
+      /* Each field reports its own problem, beside the field. */
+      $('#fEmail').classList.toggle('is-invalid', !okEmail);
+      $('#fPass').classList.toggle('is-invalid', !okPass);
+
+      if (okEmail && okPass) {
+        close();
+        toast('示範原型：登入功能未連接後端');
+      }
+    });
+  }
+
+  /* ==========================================================
      9. JUMP TO TOP
      ========================================================== */
   function initToTop() {
@@ -611,6 +748,17 @@
   function initShop() {
     const grid = $('#shopGrid');
     if (!grid) return;
+
+    /* Build the brand checkboxes from data. The count tells the user
+       how much each option is worth before they spend a click on it. */
+    const brandBox = $('#brandGroup');
+    if (brandBox) {
+      brandBox.innerHTML = BRANDS().map(b => {
+        const n = PRODUCTS.filter(p => p.brand === b).length;
+        return `<label><input type="checkbox" name="brand" value="${esc(b)}">` +
+               `${esc(b)} <span class="fcount">(${n})</span></label>`;
+      }).join('');
+    }
 
     /* Build the colour checkboxes from data. */
     $('#colourGroup').innerHTML = COLOURS.map(c =>
@@ -662,6 +810,7 @@
       const maxPrice = Number(priceInput.value);
       const mv  = checked('movement');
       const gd  = checked('gender');
+      const br  = checked('brand');
       const col = checked('colour');
       const rt  = $('input[name="rating"]:checked');
       const minRating = rt ? Number(rt.value) : 0;
@@ -670,6 +819,7 @@
         p.price <= maxPrice &&
         (!mv.length  || mv.includes(p.movement)) &&
         (!gd.length  || gd.includes(p.gender)) &&
+        (!br.length  || br.includes(p.brand)) &&
         (!col.length || col.includes(p.colour)) &&
         p.rating >= minRating &&
         (!query || (p.name + ' ' + p.brand).toLowerCase().includes(query))
@@ -804,6 +954,8 @@
      ========================================================== */
   document.addEventListener('DOMContentLoaded', function () {
     Cart.render();
+    initTheme();
+    initLogin();
     initSearch();
     initToTop();
     initHome();

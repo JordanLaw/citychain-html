@@ -43,7 +43,20 @@
       <a class="hide-sm" href="#">時間廊禮品卡</a>
       <a class="hide-sm" href="#">積分換購計劃</a>
       <a class="hide-sm" href="#">DELIGHTS會員專區</a>
-      <a class="icon-btn" href="#" aria-label="登入或註冊">
+      <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false"
+              aria-label="切換至深色主題" title="切換至深色主題">
+        <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+          <circle cx="12" cy="12" r="4.5"/>
+          <path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8"/>
+        </svg>
+        <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+          <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/>
+        </svg>
+      </button>
+
+      <a class="icon-btn" href="#" data-open-login aria-label="登入或註冊">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
           <circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/>
         </svg>
@@ -134,7 +147,7 @@
         </div>
 
         <button class="btn-primary" id="addToCart" type="button">加入購物車</button>
-        <a class="btn-secondary" href="#">登入或註冊</a>
+        <a class="btn-secondary" href="#" data-open-login>登入或註冊</a>
 
         <table class="spec" id="pdpSpec"></table>
       </div>
@@ -158,7 +171,7 @@
     <div class="footer-cols">
       <div>
         <h2>關於我們</h2>
-        <ul><li><a href="#">About City Chain</a></li></ul>
+        <ul><li><a href="about.html">About City Chain</a></li></ul>
       </div>
       <div>
         <h2>資訊</h2>

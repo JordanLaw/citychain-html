@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>男士腕錶 | CITY CHAIN 時間廊</title>
+<title>關於我們 | CITY CHAIN 時間廊</title>
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
@@ -78,7 +78,7 @@
 
   <nav class="brand-nav" aria-label="品牌">
     <div class="wrap">
-      <a href="shop.html" aria-current="true">SOLVIL ET TITUS</a>
+      <a href="shop.html">SOLVIL ET TITUS</a>
       <a href="shop.html">CASIO</a>
       <a href="shop.html">ELLESSE</a>
       <a href="shop.html">SEIKO</a>
@@ -107,105 +107,40 @@
 <main id="main">
   <div class="wrap">
 
-    <!-- Breadcrumb: current position + emergency exit -->
     <nav class="breadcrumb" aria-label="麵包屑導覽">
       <ol>
         <li><a href="index.html">首頁</a></li>
-        <li><a href="shop.html">腕錶</a></li>
-        <li aria-current="page" id="crumbCurrent">全部腕錶</li>
+        <li aria-current="page">關於我們</li>
       </ol>
     </nav>
 
-    <h1 class="page-title" id="pageTitle">全部腕錶</h1>
-
-    <!-- Category switcher — move between the five款式 pages
-         without going back to the home page. -->
-    <nav class="cat-chips" id="catChips" aria-label="腕錶款式"></nav>
-
-    <div class="shop-layout">
-
-      <!-- ====================================================
-           FILTERS — one control per dimension.
-           The original site could only filter on brand, price
-           and stock, and never in combination.
-           ==================================================== -->
-      <form class="filters" id="filters" aria-label="商品篩選">
-        <h2>篩選</h2>
-
-        <div class="fgroup" role="group" aria-label="機芯類型">
-          <h3>機芯類型</h3>
-          <label><input type="checkbox" name="movement" value="quartz">石英</label>
-          <label><input type="checkbox" name="movement" value="automatic">自動</label>
-          <label><input type="checkbox" name="movement" value="mechanical">機械</label>
-        </div>
-
-        <div class="fgroup" role="group" aria-label="性別">
-          <h3>性別</h3>
-          <label><input type="checkbox" name="gender" value="male">男裝</label>
-          <label><input type="checkbox" name="gender" value="female">女裝</label>
-        </div>
-
-        <!-- Brand is offered as one dimension among several rather
-             than as the primary navigation it was on the original site. -->
-        <div class="fgroup" role="group" aria-label="品牌">
-          <h3>品牌</h3>
-          <div id="brandGroup"></div>
-        </div>
-
-        <div class="fgroup">
-          <h3><span>價格上限</span><output id="priceOut">$13,000</output></h3>
-          <label class="sr-only" for="priceMax">價格上限</label>
-          <input type="range" id="priceMax" min="250" max="13000" step="250" value="13000">
-          <div class="scale"><span>$250</span><span>$6,500</span><span>$13,000</span></div>
-        </div>
-
-        <div class="fgroup">
-          <h3>顏色</h3>
-          <div id="colourGroup"></div>
-        </div>
-
-        <div class="fgroup">
-          <h3>客戶評分</h3>
-          <label><input type="radio" name="rating" value="5">★★★★★</label>
-          <label><input type="radio" name="rating" value="4">★★★★☆ 以上</label>
-          <label><input type="radio" name="rating" value="3">★★★☆☆ 以上</label>
-          <label><input type="radio" name="rating" value="2">★★☆☆☆ 以上</label>
-          <label><input type="radio" name="rating" value="1">★☆☆☆☆ 以上</label>
-        </div>
-
-        <button class="btn-clear" id="clearFilters" type="button">清除所有篩選</button>
-      </form>
-
-      <!-- ====================================================
-           RESULTS
-           ==================================================== -->
-      <section aria-label="商品列表">
-        <div class="shop-toolbar">
-          <p class="result-count"><span id="resultCount"></span> <span id="activeQuery"></span></p>
-          <div>
-            <label class="sr-only" for="sortBy">排序方式</label>
-            <select id="sortBy">
-              <option value="new">日期 (從新到舊)</option>
-              <option value="price-asc">價格 (低至高)</option>
-              <option value="price-desc">價格 (高至低)</option>
-              <option value="rating">評分最高</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="grid grid--3" id="shopGrid"></div>
-
-        <nav class="pagination" aria-label="分頁">
-          <button type="button" aria-current="true">1</button>
-          <button type="button">2</button>
-          <button type="button">3</button>
-          <span>…</span>
-          <button type="button">6</button>
-          <button type="button" aria-label="下一頁">›</button>
-        </nav>
-      </section>
-
+    <div class="about-hero">
+      <h1>關於 CITY CHAIN 時間廊</h1>
+      <p>時間廊是香港的腕錶零售商，代理 Solvil et Titus、Casio、Ellesse、Seiko、
+         Citizen 及 Seagull 等品牌，並提供原廠保養與售後維修服務。</p>
     </div>
+
+    <div class="about-grid">
+      <section>
+        <h2>我們的服務</h2>
+        <p>所有腕錶均附有原廠保養證明。門市及網店均提供電池更換、錶帶調校及
+           定期保養服務。</p>
+      </section>
+      <section>
+        <h2>DELIGHTS 會員</h2>
+        <p>免費登記即可累積積分、換購禮品，並優先獲得新品與限時優惠通知。</p>
+      </section>
+      <section>
+        <h2>聯絡我們</h2>
+        <p>電話：(852) 2113 2266<br>電子郵件：cs@citychain.com<br>
+           門市地址請參閱「店舖位置」。</p>
+      </section>
+    </div>
+
+    <p style="text-align:center;padding-bottom:40px">
+      <a class="btn-ghost" href="shop.html">瀏覽全部腕錶</a>
+    </p>
+
   </div>
 </main>
 
